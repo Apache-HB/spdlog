@@ -29,6 +29,9 @@ endif
 
 if get_option('no_exceptions')
   compile_args += '-DSPDLOG_NO_EXCEPTIONS'
+  if build_machine.system() == 'windows'
+    compile_args += '/EHsc-'
+  endif
 endif
 
 if get_option('wchar_support')
@@ -147,7 +150,7 @@ endif
 # ---   Conditionally add subdirs   ---
 # -------------------------------------
 
-if get_option('enable_tests') or get_option('enable_tests-ho')
+if get_option('enable_tests')
     subdir('tests')
 endif
 
@@ -158,25 +161,3 @@ endif
 if get_option('enable_benchmarks')
     subdir('bench')
 endif
-
-# -------------------
-# ---   Summary   ---
-# -------------------
-
-summary_str = '''spdlog build summary:
-  - using external fmt:  @0@
-  - building tests:      @1@
-  - building examples:   @2@
-  - building benchmarks: @3@
-  - library type:        @4@
-  - no exceptions:       @5@
-'''.format(
-  get_option('external_fmt'),
-  get_option('enable_tests'),
-  get_option('enable_examples'),
-  get_option('enable_benchmarks'),
-  get_option('library_type'),
-  get_option('no_exceptions')
-)
-
-message(summary_str)
