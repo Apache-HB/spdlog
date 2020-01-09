@@ -6,6 +6,7 @@ project('spdlog', ['cpp'],
     'cpp_std=c++11',
     'buildtype=release',
     'b_colorout=always',
+    'cpp_eh=none'
     ],
 )
 
@@ -13,7 +14,9 @@ project('spdlog', ['cpp'],
 # ---   Dependencies   ---
 # ------------------------
 dep_list = []
-compile_args = []
+compile_args = [
+    '-DSPDLOG_NO_EXCEPTIONS'
+]
 
 # Threads
 dep_list += dependency('threads')
@@ -25,13 +28,6 @@ if get_option('external_fmt')
     endif
     dep_list     += dependency('fmt')
     compile_args += '-DSPDLOG_FMT_EXTERNAL'
-endif
-
-if get_option('no_exceptions')
-  compile_args += '-DSPDLOG_NO_EXCEPTIONS'
-  if build_machine.system() == 'windows'
-    compile_args += '/EHsc-'
-  endif
 endif
 
 if get_option('wchar_support')
